@@ -1,27 +1,9 @@
-<?php
-$database = "srsdb";
-$username = "root";
-$password = "";
-$server = "localhost";
-
-$link = mysql_connect($server, $username, $password);
-
-if(!$link){
-	echo " Failed Connection to MySQL!";
-	echo mysql_error();
-	exit();
-}
-
-if(!mysql_select_db($database, $link)){
-	echo "Failed to select the database";
-	echo mysql_error();
-	exit();
-}
-?>
-
 <html>
-<link href="css/bootstrap.css" rel="stylesheet">
+
 <script src = "jquery/jquery.js"></script>
+<script src = "js/bootstrap.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet">
+
 <head>
 	<title>SRS: Ashesi</title>
 </head>
@@ -34,26 +16,34 @@ function saveReport(){
 	var location = document.getElementById("location").value;
 	var description = document.getElementById("description").value;
 
-	var saveURL = localURL+"saveReport&reporter="+encodeURIComponent(reporter)+"&email="+email+"&location="+encodeURIComponent(location)+"&description="+encodeURIComponent(description);
+	if(reporter == "" || email == "" || location == "" || description == ""){
+		var errorStr = '<div id = "status" class="alert alert-warning alert-dismissible" role="alert">Please fill all fields</div>';
+		document.getElementById("status").innerHTML = errorStr;
+	}
 
-	$.ajax({
-		url: saveURL,
-		async: false,
-		success: function(response){
-			if(response == "True")
-				document.location = "index.php";
-			else
-				document.getElementById("status").innerHTML = "Error Saving Report" + saveURL;
+	else{
+		var saveURL = localURL+"saveReport&reporter="+encodeURIComponent(reporter)+"&email="+email+"&location="+encodeURIComponent(location)+"&description="+encodeURIComponent(description);
 
-		}
-	});
+		$.ajax({
+			url: saveURL,
+			async: false,
+			success: function(response){
+				if(response == "True")
+					document.location = "index.php";
+				else{
+					var errorStr = '<div id = "status" class="alert alert-danger" role="alert">Error Saving Report!</div>';
+					document.getElementById("status").innerHTML = errorStr;
+				}
+
+			}
+		});
+	}
 }
 </script>
-<body>
+<body style = "background-color: #D9D9D9">
 
-
+	<div class = "col-lg-1"></div><div class = "col-lg-10" style="background-color: white">
 	<div class = "container-fluid">
-
 		<div class = "row" align = "center">
 			<img src = "images/logo.png" alt = "Service Request System" style = "width:200px;height:150px"></img>
 		</div>
@@ -79,7 +69,9 @@ function saveReport(){
 		<input type = "text" class = "form-control" id = "email" placeholder = "example@ashesi.edu.gh">
 	</div>
 </br>
-<!--
+
+
+<!--Location DropDown--><!--
 <div class = "input-group">
 <span class = "input-group-addon">Location:</span>
 <div class = "input-group-button">
@@ -92,14 +84,17 @@ function saveReport(){
 </div>
 
 </div>
+</br>
 -->
 
+<!--Location Input-->
 <div class = "input-group">
 	<span class = "input-group-addon">Location:</span>
 	<input type = "text" class = "form-control" id = "location" placeholder = "Enter location">
 </div>
-
 </br>
+
+<!--Description-->
 <div class = "input-group">
 	<span class = "input-group-addon">Description:</span>
 	<input type = "text" class = "form-control" id = "description" placeholder = "Enter a description of the issue">
@@ -124,12 +119,13 @@ function saveReport(){
 
 </br>
 
-<div class = "row">
-	<div id = "status">Status: </div>
+<div class = "row" align = "center">
+	<div id = "status"> </div>
 </div>
 
 </br>
 
+<!--Footer-->
 <footer>
 	<div align = "right">
 		&copyTeam SRS
@@ -137,9 +133,6 @@ function saveReport(){
 </footer>
 
 </div>
+</div>
 </body>
 </html>
-
-<?php
-mysql_close($link);
-?>
