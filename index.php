@@ -35,7 +35,7 @@ function updateRecent(){
 	var rt = document.getElementById("recentTable");
 	var rtInfo;
 
-	var x = syncAjax("fetchRecent");
+	var x = syncAjax("fetchReports");
 
 	var rData = JSON.parse(x);	
 
@@ -58,7 +58,7 @@ function updateRecent(){
 			+ '<span class = "glyphicon glyphicon-thumbs-down" onclick = "downvote(\''+rData[x]+'\')" style = "cursor: hand;"></span>    '
 			+ '<span class = "badge">'+rData[x+5]+'</span></td></tr>';
 
-			x+=5;
+			x+=6;
 		}
 
 		rtInfo += '</tbody></table>';
@@ -157,6 +157,8 @@ function alertStatus(type, msg){
 </br>
 </br>
 
+<a href = "adminLogin.php">Admin Panel</a>
+</br></br></br>
 <footer>
 	<div class = "row" align = "right">
 		<div class = "col-lg-8"></div>

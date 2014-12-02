@@ -18,7 +18,9 @@ if(!mysql_select_db($database, $link)){
 	exit();
 }
 
-if(isset($_REQUEST["fetchRecent"])){
+
+//Fetch Reports
+if(isset($_REQUEST["fetchReports"])){
 	$queryRecent = mysql_query("select * from SRS_REPORT", $link);
 	$queryResult = mysql_fetch_assoc($queryRecent);
 
@@ -31,32 +33,86 @@ if(isset($_REQUEST["fetchRecent"])){
 		$allArray[] = $queryResult["description"];
 		$allArray[] = $queryResult["status"];
 		$allArray[] = $queryResult["votes"];
+		$allArray[] = $queryResult["wid"];
 
 		$queryResult = mysql_fetch_assoc($queryRecent);
 	}
 
-	$rArray = [];
-	$count = 0;
 
-	for($i = count($allArray)-1; $i >= 0; $i--){
-		if($count <= 30){
-			$rArray[] = $allArray[$i];
-			$count++;
-		}
-		else
-			break;
+	if(isset($_REQUEST["all"])){
+		echo (json_encode($allArray));
 	}
+
+	else{
+		$rArray = [];
+		$count = 0;
+
+//Store recent 5
+		for($i = count($allArray)-1; $i >= 0; $i--){
+			if($count <= 35){
+				$rArray[] = $allArray[$i];
+				$count++;
+			}
+			else
+				break;
+		}
 
 //Reverse Array
-	$recentArray = [];
+		$recentArray = [];
 
-	for($x = count($rArray)-1; $x >= 0; $x--){
-		$recentArray[] = $rArray[$x];
+		for($x = count($rArray)-1; $x >= 0; $x--){
+			$recentArray[] = $rArray[$x];
+		}
+
+		echo(json_encode($recentArray));
 	}
-
-	echo(json_encode($recentArray));
 }
 
+//Fetch Singular Report
+else if(isset($_REQUEST["fetchReport"])){
+	$rid = $_REQUEST["rid"];
+
+	$query = mysql_query("SELECT * from SRS_REPORT where rid = $rid", $link);
+	$result = mysql_fetch_assoc($query);
+	$rArray = Array();
+
+	$rArray[] = $result["reporter"];		//0
+	$rArray[] = $result["email"];			//1
+	$rArray[] = $result["location"];		//2
+	$rArray[] = $result["description"];		//3
+	$rArray[] = $result["status"];			//4
+	$rArray[] = $result["votes"];			//5
+	$rArray[] = $result["wid"];				//6
+
+	echo (json_encode($rArray));
+}
+
+//Single Worker
+else if(isset($_REQUEST["fetchWorker"])){
+	$wid = $_REQUEST["wid"];
+
+	$query = mysql_query("SELECT name from SRS_WORKER where wid = $wid", $link);
+	$result = mysql_fetch_assoc($query);
+	$result = $result["name"];
+
+	echo $result;
+}
+
+//All Workers
+else if(isset($_REQUEST["fetchWorkers"])){
+	$query = mysql_query("SELECT * from SRS_WORKER", $link);
+	$result = mysql_fetch_assoc($query);
+	$resultArray = Array();
+
+	while($result){
+		$resultArray[] = $result["wid"];
+		$resultArray[] = $result["name"];
+
+		$result = mysql_fetch_assoc($query);
+	}
+
+	echo (json_encode($resultArray));
+}
 
 //Save Report
 else if(isset($_REQUEST["saveReport"])){
@@ -93,6 +149,32 @@ else if (isset($_REQUEST["downvote"])){
 		echo "True";
 	else
 		echo "False";
+}
+
+else if(isset($_REQUEST["updateReport"])){
+	$rid = $_REQUEST["rid"];
+	$status = $_REQUEST["status"];
+	$wid = $_REQUEST["wid"];
+
+	$query = mysql_query("UPDATE SRS_REPORT set status = '$status', wid = $wid where rid = $rid", $link);
+
+	if($query)
+		echo "True";
+	else
+		echo "False";
+}
+
+else if (isset($_REQUEST["adminLogin"])){
+	$username = $_REQUEST["username"];
+	$password = $_REQUEST["password"];
+	$query = mysql_query("SELECT * from SRS_ADMIN where username = '$username' and password = '$password'", $link);
+	$rows = mysql_num_rows($query);
+
+	if($rows >= 1)
+		echo "True";
+	else
+		echo  "False";
+
 }
 mysql_close($link);
 ?>
