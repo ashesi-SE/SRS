@@ -64,7 +64,7 @@ function updateReportTable(){
 				var workerName = syncAjax("fetchWorker&wid="+rData[x+6]);
 				rtInfo+='</td><td align = "center"><span class = "badge">'+rData[x+5]+'</span></td><td align = "center">'+workerName+'</td></tr>';
 
-				x+=6;
+				x+=7;
 			}
 
 			rtInfo += '</tbody></table>';
