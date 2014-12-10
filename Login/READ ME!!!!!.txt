@@ -1,0 +1,6 @@
+*In this folder holds the 'Login.html' and 'login.php'
+*The Login.html is where one will enter his/her username and password and press login
+*The login.php connects to database and fetches the data required to validate the user credentials 
+
+N.B.!!
+Please Start your Xampp before you could use the login

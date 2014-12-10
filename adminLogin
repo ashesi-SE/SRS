@@ -1,0 +1,43 @@
+<?php
+	$msg="Login";
+session_start();
+
+if(isset($_SESSION['username']) && isset($_SESSION['password'])){
+/*
+	Go to Main Page
+header("Location:--mainpage--"); 
+*/
+}else{
+header("Location:adminLogin.html"); 
+}
+?>
+<html>
+<div>
+		<form action="login.php" method="POST">
+		<table align="center" width="80%">
+			<tr>
+				<td width="30%"></td>
+				<td width="30%"></td>
+			</tr>
+			<tr>
+				<td width="30%"></td>
+				<td>username</td>
+				<td><input type="text" name="username"></td>
+				<td width="30%"></td>
+			</tr>
+			<tr>
+				<td width="30%"></td>
+				<td>password</td>
+				<td><input type="password" name="password"></td>
+				<td  width="30%"></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+				<td><input type="submit" name="submit" value="login"></td>
+				<td></td>
+			</tr>
+		<table>
+	</form>
+</div>
+</html>
