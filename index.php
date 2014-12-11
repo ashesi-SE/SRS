@@ -2,11 +2,16 @@
 $username = null;
 session_start();
 if(isset($_SESSION["username"]))
-$username = $_SESSION["username"];
+	$username = $_SESSION["username"];
 ?>
 <html>
 <link href="css/bootstrap.css" rel="stylesheet">
 <script src = "jquery/jquery.js"></script>
+<script src = "js/jquery.dataTables.js"></script>
+<script src = "js/jquery.dataTables.min.js"></script>
+<link href="css/jquery.dataTables.css" rel="stylesheet">
+<link href="css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="css/jquery.dataTables_themeroller.css" rel="stylesheet">
 <head>
 	<title>SRS: Ashesi</title>
 </head>
@@ -54,8 +59,8 @@ function updateRecent(){
 
 	if(rData.length > 0){
 		rtInfo = '<div id = "recentTable">';
-		rtInfo += '<table class = "table table-striped"><tbody>';
-		rtInfo += '<tr><th>Report ID</th><th>Reporter</th><th>Location</th><th>Description</th><th>Status</th><th>Votes</th></tr>';
+		rtInfo += '<table id = "dataTable" class = "table table-striped"><thead>';
+		rtInfo += '<tr><th>Report ID</th><th>Reporter</th><th>Location</th><th>Description</th><th>Status</th><th>Votes</th></tr></thead><tbody>';
 
 		for(x = 0; x < rData.length; x++){
 			rtInfo += '<tr><td>'+rData[x]+'</td><td>'+rData[x+1]+'</td><td>'+rData[x+2]+'</td><td>'+rData[x+3]+'</td><td>';
@@ -76,6 +81,9 @@ function updateRecent(){
 		rtInfo += '</div>'; 
 		rt.innerHTML = rtInfo;
 	}
+	$(document).ready(function () {
+		$("#dataTable").DataTable();
+	});
 }
 
 function updateAll(){
@@ -88,8 +96,8 @@ function updateAll(){
 
 	if(rData.length > 0){
 		rtInfo = '<div id = "recentTable">';
-		rtInfo += '<table class = "table table-striped"><tbody>';
-		rtInfo += '<tr><th>Report ID</th><th>Reporter</th><th>Location</th><th>Description</th><th>Status</th><th>Vote</th></tr>';
+		rtInfo += '<table id = "dataTable" class = "table table-striped"><thead>';
+		rtInfo += '<tr><th>Report ID</th><th>Reporter</th><th>Location</th><th>Description</th><th>Status</th><th>Vote</th></tr></thead><tbody>';
 
 		for(x = 0; x < rData.length; x++){
 			rtInfo += '<tr style = "cursor:hand;" onclick = view(\''+rData[x]+'\')><td>'+rData[x]+'</td><td>'+rData[x+1]+'</td><td>'+rData[x+2]+'</td><td>'+rData[x+3]+'</td><td>';
@@ -113,7 +121,9 @@ function updateAll(){
 		rtInfo += '</div>'; 
 		rt.innerHTML = rtInfo;
 	}
-
+	$(document).ready(function () {
+		$("#dataTable").DataTable();
+	});
 }
 
 //Upvote
@@ -225,7 +235,7 @@ function logout(){
 		</div>
 		<div class = "col-lg-1"></div>
 		<div>
-	</br>
+		</br>
 		<footer>
 			<div class = "row" align = "right">
 				<div class = "col-lg-8"></div>

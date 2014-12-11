@@ -7,6 +7,12 @@ session_start();
 <html>
 <link href="css/bootstrap.css" rel="stylesheet">
 <script src = "jquery/jquery.js"></script>
+<script src = "js/jquery.dataTables.js"></script>
+<script src = "js/jquery.dataTables.min.js"></script>
+<link href="css/jquery.dataTables.css" rel="stylesheet">
+<link href="css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="css/jquery.dataTables_themeroller.css" rel="stylesheet">
+
 <head>
 	<title>SRS: Admin Panel</title>
 </head>
@@ -47,31 +53,36 @@ function updateReportTable(){
 
 	if(rData.length > 0){
 		rtInfo = '<div id = "reportTable">';
-		rtInfo += '<table class = "table table-striped"><tbody>';
-		rtInfo += '<tr><th>Report ID</th><th>Reporter</th><th>Location</th><th>Description</th><th>Status</th><th>Votes</th><th align = "center">Assigned To</th></tr>';
+		rtInfo += '<table id = "dataTable" class = "table table-striped"><thead>';
+		rtInfo += '<tr><th>Report ID</th><th>Reporter</th><th>Location</th><th>Description</th><th>Status</th><th>Votes</th><th align = "center">Assigned To</th></tr></thead><tbody>';
 
 		for(x = 0; x < rData.length; x++){
 			rtInfo += '<tr style = "cursor:hand;" onclick = edit(\''+rData[x]+'\')><td>'+rData[x]+'</td><td>'+rData[x+1]+'</td><td>'+rData[x+2]+'</td><td>'+rData[x+3]+'</td><td>';
 
-				if(rData[x+4] == "Unresolved")
-					rtInfo+='<span class="label label-danger">'+rData[x+4]+'</span>';
-				else if (rData[x+4] == "Pending")
-					rtInfo+='<span class="label label-warning">'+rData[x+4]+'</span>';
-				else if (rData[x+4] == "Resolved")
-					rtInfo+='<span class="label label-success">'+rData[x+4]+'</span>';
+			if(rData[x+4] == "Unresolved")
+				rtInfo+='<span class="label label-danger">'+rData[x+4]+'</span>';
+			else if (rData[x+4] == "Pending")
+				rtInfo+='<span class="label label-warning">'+rData[x+4]+'</span>';
+			else if (rData[x+4] == "Resolved")
+				rtInfo+='<span class="label label-success">'+rData[x+4]+'</span>';
 
-				//Fetch Worker name
-				var workerName = syncAjax("fetchWorker&wid="+rData[x+6]);
-				rtInfo+='</td><td align = "center"><span class = "badge">'+rData[x+5]+'</span></td><td align = "center">'+workerName+'</td></tr>';
+//Fetch Worker name
+var workerName = syncAjax("fetchWorker&wid="+rData[x+6]);
+rtInfo+='</td><td align = "center"><span class = "badge">'+rData[x+5]+'</span></td><td align = "center">'+workerName+'</td></tr>';
 
-				x+=7;
-			}
+x+=7;
+}
 
-			rtInfo += '</tbody></table>';
-			rtInfo += '</div>'; 
-			rt.innerHTML = rtInfo;
-		}
-	}
+rtInfo += '</tbody></table>';
+rtInfo += '</div>'; 
+rt.innerHTML = rtInfo;
+}
+
+$(document).ready(function () {
+	$("#dataTable").DataTable();
+});
+
+}
 
 //Edit Page
 function edit(rid){
@@ -121,13 +132,6 @@ function logout(){
 					<li class = "divider"></li>
 				</ul>
 			</div>
-			<!--Search-->
-			<form class="navbar-form navbar-right" role="search">
-				<div class="form-group">
-					<input type="text" class="form-control" placeholder="Search">
-				</div>
-				<button type="submit" class="btn btn-default">Submit</button>
-			</form>
 		</div>
 	</nav>
 
@@ -141,10 +145,10 @@ function logout(){
 <div class = "row" align = "center">
 	<div class = "col-lg-5"></div>
 	<div class = "col-lg-2">
-	<button class = "btn btn-danger" onclick = "logout()">Logout</div>
+		<button class = "btn btn-danger" onclick = "logout()">Logout</div>
+		</div>
+		<div class = "col-lg-5"></div>
 	</div>
-	<div class = "col-lg-5"></div>
-</div>
 
 </br></br></br>
 <footer>
