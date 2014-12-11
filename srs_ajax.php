@@ -188,9 +188,9 @@ else if (isset($_REQUEST["adminLogin"])){
 	$rows = mysql_num_rows($query);
 
 	if($rows >= 1){
-		echo "True";
 		session_start();
 		$_SESSION["username"]=$username;
+		echo "True";
 	}
 	else
 		echo  "False";
