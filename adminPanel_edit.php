@@ -54,6 +54,7 @@ function fetchInfo(){
 	document.getElementById("email").placeholder = rArray[1];
 	document.getElementById("location").placeholder = rArray[2];
 	document.getElementById("description").placeholder = rArray[3];
+	document.getElementById("tags").placeholder = rArray[7];
 
 //Status Info
 	var rsInfo = '<div id = "reportStatus"><form name = "status"><div class = "input-group"><span class = "input-group-addon">Status:'
@@ -199,6 +200,13 @@ function alertStatus(type, msg){
 <div class = "input-group">
 	<span class = "input-group-addon">Description:</span>
 	<input type = "text" class = "form-control" id = "description" placeholder = "None" disabled>
+</div>
+</br>
+
+<!--Tags-->
+<div class = "input-group">
+	<span class = "input-group-addon">Tags:</span>
+	<input type = "text" class = "form-control" id = "tags" placeholder = "None" disabled>
 </div>
 </br>
 

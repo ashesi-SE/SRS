@@ -24,7 +24,7 @@ if(isset($_REQUEST["fetchReports"])){
 	$queryRecent = mysql_query("select * from SRS_REPORT", $link);
 	$queryResult = mysql_fetch_assoc($queryRecent);
 
-	$allArray = [];
+	$allArray = Array();
 
 	while($queryResult){
 		$allArray[] = $queryResult["rid"];
@@ -34,6 +34,7 @@ if(isset($_REQUEST["fetchReports"])){
 		$allArray[] = $queryResult["status"];
 		$allArray[] = $queryResult["votes"];
 		$allArray[] = $queryResult["wid"];
+		$allArray[] = $queryResult["tags"];
 
 		$queryResult = mysql_fetch_assoc($queryRecent);
 	}
@@ -44,12 +45,12 @@ if(isset($_REQUEST["fetchReports"])){
 	}
 
 	else{
-		$rArray = [];
+		$rArray = Array();
 		$count = 0;
 
 //Store recent 5
 		for($i = count($allArray)-1; $i >= 0; $i--){
-			if($count <= 35){
+			if($count < 40){
 				$rArray[] = $allArray[$i];
 				$count++;
 			}
@@ -58,7 +59,7 @@ if(isset($_REQUEST["fetchReports"])){
 		}
 
 //Reverse Array
-		$recentArray = [];
+		$recentArray = Array();
 
 		for($x = count($rArray)-1; $x >= 0; $x--){
 			$recentArray[] = $rArray[$x];
@@ -76,15 +77,16 @@ else if(isset($_REQUEST["fetchReport"])){
 	$result = mysql_fetch_assoc($query);
 	$rArray = Array();
 
-	$rArray[] = $result["reporter"];		//0
-	$rArray[] = $result["email"];			//1
-	$rArray[] = $result["location"];		//2
-	$rArray[] = $result["description"];		//3
-	$rArray[] = $result["status"];			//4
-	$rArray[] = $result["votes"];			//5
-	$rArray[] = $result["wid"];				//6
+$rArray[] = $result["reporter"];		//0
+$rArray[] = $result["email"];			//1
+$rArray[] = $result["location"];		//2
+$rArray[] = $result["description"];		//3
+$rArray[] = $result["status"];			//4
+$rArray[] = $result["votes"];			//5
+$rArray[] = $result["wid"];				//6
+$rArray[] = $result["tags"];			//7
 
-	echo (json_encode($rArray));
+echo (json_encode($rArray));
 }
 
 //Single Worker
@@ -120,8 +122,9 @@ else if(isset($_REQUEST["saveReport"])){
 	$email = $_REQUEST["email"];
 	$location = $_REQUEST["location"];
 	$description = $_REQUEST["description"];
+	$tags = $_REQUEST["tags"];
 
-	$query = mysql_query("INSERT into SRS_REPORT(reporter, email, location, description) values ('$reporter', '$email', '$location', '$description')", $link);
+	$query = mysql_query("INSERT into SRS_REPORT(reporter, email, location, description, tags) values ('$reporter', '$email', '$location', '$description', '$tags')", $link);
 
 	if($query)
 		echo "True";
@@ -151,6 +154,7 @@ else if (isset($_REQUEST["downvote"])){
 		echo "False";
 }
 
+//Update Report!
 else if(isset($_REQUEST["updateReport"])){
 	$rid = $_REQUEST["rid"];
 	$status = $_REQUEST["status"];
@@ -164,17 +168,78 @@ else if(isset($_REQUEST["updateReport"])){
 		echo "False";
 }
 
+//Admin login
 else if (isset($_REQUEST["adminLogin"])){
 	$username = $_REQUEST["username"];
 	$password = $_REQUEST["password"];
 	$query = mysql_query("SELECT * from SRS_ADMIN where username = '$username' and password = '$password'", $link);
 	$rows = mysql_num_rows($query);
 
-	if($rows >= 1)
+	if($rows >= 1){
 		echo "True";
+		session_start();
+		$_SESSION["username"]=$username;
+	}
 	else
 		echo  "False";
-
 }
+
+//User Login
+else if (isset($_REQUEST["userLogin"])){
+	$username = $_REQUEST["username"];
+	$password = $_REQUEST["password"];
+
+	$query = mysql_query("SELECT * from SRS_User where username = '$username' and password = '$password'",$link);
+
+	if(mysql_num_rows($query) == 1){
+		echo "True";
+		session_start();
+		$_SESSION["username"]=$username;
+	}
+	else
+		echo "False";
+}
+
+//Post Comment
+else if (isset($_REQUEST["addComment"])){
+	$rid = $_REQUEST["rid"];
+	$username = $_REQUEST["username"];
+	$comment = $_REQUEST["comment"];
+
+	$query = mysql_query("INSERT into SRS_Comment (rid, username, comment) values ('$rid', '$username', '$comment')",$link);
+
+	if($query)
+		echo "True";
+	else
+		echo "False";
+}
+
+//Fetch Comments
+else if(isset($_REQUEST["fetchComments"])){
+	$rid = $_REQUEST["rid"];
+	$query = mysql_query("SELECT * from SRS_Comment where rid = '$rid'",$link);
+
+	if($query){
+		$result = mysql_fetch_assoc($query);
+		$resultArray = Array();
+
+		while($result){
+			$resultArray[] = $result["username"];
+			$resultArray[] = $result["comment"];
+			$result = mysql_fetch_assoc($query);
+		}
+		echo (json_encode($resultArray));
+	}
+	else
+		echo "False";
+}
+
+
+//Logout
+else if(isset($_REQUEST["logout"])){
+	session_start();
+	session_destroy();
+}
+
 mysql_close($link);
 ?>
