@@ -8,7 +8,7 @@
 	<title>SRS: Ashesi</title>
 </head>
 <script>
-var localURL = "http://localhost/SRS/srs_ajax.php?";
+var localURL = "srs_ajax.php?";
 
 function saveReport(){
 	var reporter = document.getElementById("name").value;

@@ -1,8 +1,20 @@
 <?php
+$host = "local";
+
+if($host == "online"){
+$database = "csashesi_niiapa-abbey";
+$username = "csashesi_na15";
+$password = "db!b619bc";
+$server = "localhost";
+}
+
+else{
 $database = "srsdb";
 $username = "root";
 $password = "";
 $server = "localhost";
+}
+
 
 $link = mysql_connect($server, $username, $password);
 
@@ -19,9 +31,9 @@ if(!mysql_select_db($database, $link)){
 }
 
 
-//Fetch Reports
+//Fetch reports
 if(isset($_REQUEST["fetchReports"])){
-	$queryRecent = mysql_query("select * from SRS_REPORT", $link);
+	$queryRecent = mysql_query("SELECT * from srs_report", $link);
 	$queryResult = mysql_fetch_assoc($queryRecent);
 
 	$allArray = Array();
@@ -69,11 +81,11 @@ if(isset($_REQUEST["fetchReports"])){
 	}
 }
 
-//Fetch Singular Report
+//Fetch Singular report
 else if(isset($_REQUEST["fetchReport"])){
 	$rid = $_REQUEST["rid"];
 
-	$query = mysql_query("SELECT * from SRS_REPORT where rid = $rid", $link);
+	$query = mysql_query("SELECT * from srs_report where rid = $rid", $link);
 	$result = mysql_fetch_assoc($query);
 	$rArray = Array();
 
@@ -89,20 +101,20 @@ $rArray[] = $result["tags"];			//7
 echo (json_encode($rArray));
 }
 
-//Single Worker
+//Single worker
 else if(isset($_REQUEST["fetchWorker"])){
 	$wid = $_REQUEST["wid"];
 
-	$query = mysql_query("SELECT name from SRS_WORKER where wid = $wid", $link);
+	$query = mysql_query("SELECT name from srs_worker where wid = $wid", $link);
 	$result = mysql_fetch_assoc($query);
 	$result = $result["name"];
 
 	echo $result;
 }
 
-//All Workers
+//All workers
 else if(isset($_REQUEST["fetchWorkers"])){
-	$query = mysql_query("SELECT * from SRS_WORKER", $link);
+	$query = mysql_query("SELECT * from srs_worker", $link);
 	$result = mysql_fetch_assoc($query);
 	$resultArray = Array();
 
@@ -116,7 +128,7 @@ else if(isset($_REQUEST["fetchWorkers"])){
 	echo (json_encode($resultArray));
 }
 
-//Save Report
+//Save report
 else if(isset($_REQUEST["saveReport"])){
 	$reporter = $_REQUEST["reporter"];
 	$email = $_REQUEST["email"];
@@ -124,7 +136,7 @@ else if(isset($_REQUEST["saveReport"])){
 	$description = $_REQUEST["description"];
 	$tags = $_REQUEST["tags"];
 
-	$query = mysql_query("INSERT into SRS_REPORT(reporter, email, location, description, tags) values ('$reporter', '$email', '$location', '$description', '$tags')", $link);
+	$query = mysql_query("INSERT into srs_report(reporter, email, location, description, tags) values ('$reporter', '$email', '$location', '$description', '$tags')", $link);
 
 	if($query)
 		echo "True";
@@ -135,7 +147,7 @@ else if(isset($_REQUEST["saveReport"])){
 //Upvote
 else if (isset($_REQUEST["upvote"])){
 	$rid = $_REQUEST["rid"];
-	$query = mysql_query("UPDATE SRS_REPORT SET votes = (votes + 1) where rid = $rid", $link);
+	$query = mysql_query("UPDATE srs_report SET votes = (votes + 1) where rid = $rid", $link);
 
 	if($query)
 		echo "True";
@@ -146,7 +158,7 @@ else if (isset($_REQUEST["upvote"])){
 //Downvote
 else if (isset($_REQUEST["downvote"])){
 	$rid = $_REQUEST["rid"];
-	$query = mysql_query("UPDATE SRS_REPORT SET votes = (votes - 1) where rid = $rid", $link);
+	$query = mysql_query("UPDATE srs_report SET votes = (votes - 1) where rid = $rid", $link);
 
 	if($query)
 		echo "True";
@@ -154,13 +166,13 @@ else if (isset($_REQUEST["downvote"])){
 		echo "False";
 }
 
-//Update Report!
+//Update report!
 else if(isset($_REQUEST["updateReport"])){
 	$rid = $_REQUEST["rid"];
 	$status = $_REQUEST["status"];
 	$wid = $_REQUEST["wid"];
 
-	$query = mysql_query("UPDATE SRS_REPORT set status = '$status', wid = $wid where rid = $rid", $link);
+	$query = mysql_query("UPDATE srs_report set status = '$status', wid = $wid where rid = $rid", $link);
 
 	if($query)
 		echo "True";
@@ -168,11 +180,11 @@ else if(isset($_REQUEST["updateReport"])){
 		echo "False";
 }
 
-//Admin login
+//admin login
 else if (isset($_REQUEST["adminLogin"])){
 	$username = $_REQUEST["username"];
 	$password = $_REQUEST["password"];
-	$query = mysql_query("SELECT * from SRS_ADMIN where username = '$username' and password = '$password'", $link);
+	$query = mysql_query("SELECT * from srs_admin where username = '$username' and password = '$password'", $link);
 	$rows = mysql_num_rows($query);
 
 	if($rows >= 1){
@@ -184,29 +196,29 @@ else if (isset($_REQUEST["adminLogin"])){
 		echo  "False";
 }
 
-//User Login
+//user Login
 else if (isset($_REQUEST["userLogin"])){
 	$username = $_REQUEST["username"];
 	$password = $_REQUEST["password"];
 
-	$query = mysql_query("SELECT * from SRS_User where username = '$username' and password = '$password'",$link);
+	$query = mysql_query("SELECT * from srs_user where username = '$username' and password = '$password'",$link);
 
 	if(mysql_num_rows($query) == 1){
-		echo "True";
 		session_start();
 		$_SESSION["username"]=$username;
+		echo "True";
 	}
 	else
 		echo "False";
 }
 
-//Post Comment
+//Post comment
 else if (isset($_REQUEST["addComment"])){
 	$rid = $_REQUEST["rid"];
 	$username = $_REQUEST["username"];
 	$comment = $_REQUEST["comment"];
 
-	$query = mysql_query("INSERT into SRS_Comment (rid, username, comment) values ('$rid', '$username', '$comment')",$link);
+	$query = mysql_query("INSERT into srs_comment (rid, username, comment) values ('$rid', '$username', '$comment')",$link);
 
 	if($query)
 		echo "True";
@@ -214,10 +226,10 @@ else if (isset($_REQUEST["addComment"])){
 		echo "False";
 }
 
-//Fetch Comments
+//Fetch comments
 else if(isset($_REQUEST["fetchComments"])){
 	$rid = $_REQUEST["rid"];
-	$query = mysql_query("SELECT * from SRS_Comment where rid = '$rid'",$link);
+	$query = mysql_query("SELECT * from srs_comment where rid = '$rid'",$link);
 
 	if($query){
 		$result = mysql_fetch_assoc($query);

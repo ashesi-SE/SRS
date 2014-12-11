@@ -6,7 +6,7 @@
 </head>
 
 <script>
-var localURL = "http://localhost/SRS/srs_ajax.php?";
+var localURL = "srs_ajax.php?";
 
 //Login function
 function login(){

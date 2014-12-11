@@ -17,7 +17,7 @@ if(isset($_SESSION["username"]))
 </head>
 
 <script>
-var localURL = "http://localhost/SRS/srs_ajax.php?";
+var localURL = "srs_ajax.php?";
 var username = '<?php echo $username; ?>';
 
 $(document).ready(function () {

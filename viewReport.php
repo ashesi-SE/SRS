@@ -21,7 +21,7 @@ else{
 </head>
 
 <script>
-var localURL = "http://localhost/SRS/srs_ajax.php?";
+var localURL = "srs_ajax.php?";
 var rid = "<?php echo $rid; ?>";
 var username = '<?php echo $username; ?>';
 var setStatus;
