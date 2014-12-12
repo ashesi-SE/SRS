@@ -8,7 +8,7 @@ if(isset($_SESSION['username']) && isset($_SESSION['password'])){
 header("Location:--mainpage--"); 
 */
 }else{
-header("Location:Login.html"); 
+header("Location:adminLogin.html"); 
 }
 ?>
 <html>

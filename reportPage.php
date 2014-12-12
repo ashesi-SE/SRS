@@ -8,21 +8,22 @@
 	<title>SRS: Ashesi</title>
 </head>
 <script>
-var localURL = "http://localhost/SRS/srs_ajax.php?";
+var localURL = "srs_ajax.php?";
 
 function saveReport(){
 	var reporter = document.getElementById("name").value;
 	var email = document.getElementById("email").value;
 	var location = document.getElementById("location").value;
 	var description = document.getElementById("description").value;
+	var tags = document.getElementById("tags").value;
 
-	if(reporter == "" || email == "" || location == "" || description == ""){
+	if(reporter == "" || email == "" || location == "" || description == "" || tags == ""){
 		var errorStr = '<div id = "status" class="alert alert-warning alert-dismissible" role="alert">Please fill all fields</div>';
 		document.getElementById("status").innerHTML = errorStr;
 	}
 
 	else{
-		var saveURL = localURL+"saveReport&reporter="+encodeURIComponent(reporter)+"&email="+email+"&location="+encodeURIComponent(location)+"&description="+encodeURIComponent(description);
+		var saveURL = localURL+"saveReport&reporter="+encodeURIComponent(reporter)+"&email="+email+"&location="+encodeURIComponent(location)+"&description="+encodeURIComponent(description)+"&tags="+encodeURIComponent(tags);
 
 		$.ajax({
 			url: saveURL,
@@ -98,6 +99,14 @@ function saveReport(){
 <div class = "input-group">
 	<span class = "input-group-addon">Description:</span>
 	<input type = "text" class = "form-control" id = "description" placeholder = "Enter a description of the issue">
+</div>
+
+
+<!--Tags-->
+</br>
+<div class = "input-group">
+	<span class = "input-group-addon">Tags:</span>
+	<input type = "text" class = "form-control" id = "tags" placeholder = "Eg: lecture hall, projector, 218">
 </div>
 
 </div>
