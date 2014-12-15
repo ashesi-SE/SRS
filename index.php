@@ -23,10 +23,12 @@ var username = '<?php echo $username; ?>';
 $(document).ready(function () {
 	if(username == null || username == ""){
 		updateRecent();
+		document.getElementById("reportButton").innerHTML='';
 	}
 	else{
 		updateAll();
 		document.getElementById("logoutBtn").innerHTML='<div role = "button" class = "btn btn-danger" onclick = "logout()"><span class = "glyphicon glyphicon-off"></span> Logout</div>';
+		document.getElementById("reportButton").innerHTML='<div class = "row" align = "center" id = "reportButton"><div class = "col-lg-5"></div><div class = "col-lg-2"><a href = "reportPage.php" role = "button" class = "btn btn-primary">Report Issue</a></div><div class = "col-lg-5"></div></div>';
 	}
 });
 
@@ -59,7 +61,7 @@ function updateRecent(){
 
 	if(rData.length > 0){
 		rtInfo = '<div id = "recentTable">';
-		rtInfo += '<table id = "dataTable" class = "table table-striped"><thead>';
+		rtInfo += '<table class = "table table-striped"><thead>';
 		rtInfo += '<tr><th>Report ID</th><th>Reporter</th><th>Location</th><th>Description</th><th>Status</th><th>Votes</th></tr></thead><tbody>';
 
 		for(x = 0; x < rData.length; x++){
@@ -81,9 +83,6 @@ function updateRecent(){
 		rtInfo += '</div>'; 
 		rt.innerHTML = rtInfo;
 	}
-	$(document).ready(function () {
-		$("#dataTable").DataTable();
-	});
 }
 
 function updateAll(){
@@ -214,7 +213,7 @@ function logout(){
 </br></br></br>
 
 <!--Report Button Below-->
-<div class = "row" align = "center">
+<div class = "row" align = "center" id = "reportButton">
 	<div class = "col-lg-5"></div>
 	<div class = "col-lg-2">
 		<a href = "reportPage.php" role = "button" class = "btn btn-primary">Report Issue</a>
@@ -229,24 +228,25 @@ function logout(){
 <div class = "row">
 	<div class = "col-lg-2"></div>
 	<div class = "col-lg-8" align = "right">
-		<div><a href = "adminLogin.php">Admin Panel</a><div>
+		<div><a href = "adminLogin.php">Admin Login</a><div>
 			<div><a href = "userLogin.php">User Login</a></div>
-			<div id = "logoutBtn"></div>
-		</div>
-		<div class = "col-lg-1"></div>
-		<div>
-		</br>
-		<footer>
-			<div class = "row" align = "right">
-				<div class = "col-lg-8"></div>
-				<div class = "col-lg-4" align = "right">
-					&copyTeam SRS
-				</div>
+			<div><a href = "workerLogin.php">Worker Login</a><div>
+				<div id = "logoutBtn"></div>
 			</div>
-		</footer>
+			<div class = "col-lg-1"></div>
+			<div>
+			</br>
+			<footer>
+				<div class = "row" align = "right">
+					<div class = "col-lg-8"></div>
+					<div class = "col-lg-4" align = "right">
+						&copyTeam SRS
+					</div>
+				</div>
+			</footer>
 
-		<div class = "col-lg-1"></div>
+			<div class = "col-lg-1"></div>
+		</div>
 	</div>
-</div>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <?php
 session_start();
-if(!$_SESSION["admin"])
-header("Location: adminLogin.php");
+if(!$_SESSION["worker"] && !$_SESSION["wid"])
+	header("Location: adminLogin.php");
 
 ?>
 <html>
@@ -21,7 +21,7 @@ header("Location: adminLogin.php");
 var localURL = "srs_ajax.php?";
 
 $(document).ready(function () {
-	updateReportTable();
+	updateTasksTable();
 });
 
 //Ajax sync function
@@ -43,11 +43,11 @@ function syncAjax(u){
 
 
 //Update Recent Reports table
-function updateReportTable(){
+function updateTasksTable(){
 	var rt = document.getElementById("reportTable");
 	var rtInfo;
 
-	var x = syncAjax("fetchReports&all");
+	var x = syncAjax("fetchTasks");
 
 	var rData = JSON.parse(x);	
 
@@ -57,7 +57,7 @@ function updateReportTable(){
 		rtInfo += '<tr><th>Report ID</th><th>Reporter</th><th>Location</th><th>Description</th><th>Status</th><th>Votes</th><th align = "center">Assigned To</th></tr></thead><tbody>';
 
 		for(x = 0; x < rData.length; x++){
-			rtInfo += '<tr style = "cursor:hand;" onclick = edit(\''+rData[x]+'\')><td>'+rData[x]+'</td><td>'+rData[x+1]+'</td><td>'+rData[x+2]+'</td><td>'+rData[x+3]+'</td><td>';
+			rtInfo += '<tr style = "cursor:hand;" onclick = view(\''+rData[x]+'\')><td>'+rData[x]+'</td><td>'+rData[x+1]+'</td><td>'+rData[x+2]+'</td><td>'+rData[x+3]+'</td><td>';
 
 			if(rData[x+4] == "Unresolved")
 				rtInfo+='<span class="label label-danger">'+rData[x+4]+'</span>';
@@ -85,8 +85,8 @@ $(document).ready(function () {
 }
 
 //Edit Page
-function edit(rid){
-	document.location = "adminPanel_edit.php?rid="+rid;
+function view(rid){
+	document.location = "workerPanel_view.php?rid="+rid;
 }
 
 
@@ -112,7 +112,7 @@ function alertStatus(type, msg){
 
 function logout(){
 	var logout = syncAjax("logout");
-	document.location = "index.php";
+	document.location = "workerLogin.php";
 }
 
 </script>
@@ -123,15 +123,14 @@ function logout(){
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<a class="navbar-brand">Admin Panel</a>
+				<a class="navbar-brand">Worker Panel</a>
 			</div>
 			<!--Home-->
 			<div>
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="adminPanel.php">Home</a></li>
+					<li class="active"><a href="workerPanel.php">Tasks</a></li>
 					<li class = "divider"></li>
-					<li><a href="adminPanel_create.php">Create Worker</a></li>
-					<li><a href="adminPanel_chat.php">Chat</a></li>
+					<li><a href="workerPanel_chat.php">Chat</a></li>
 				</ul>
 			</div>
 		</div>

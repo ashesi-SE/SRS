@@ -2,17 +2,17 @@
 $host = "local";
 
 if($host == "online"){
-$database = "csashesi_niiapa-abbey";
-$username = "csashesi_na15";
-$password = "db!b619bc";
-$server = "localhost";
+	$database = "csashesi_niiapa-abbey";
+	$username = "csashesi_na15";
+	$password = "db!b619bc";
+	$server = "localhost";
 }
 
 else{
-$database = "srsdb";
-$username = "root";
-$password = "";
-$server = "localhost";
+	$database = "srsdb";
+	$username = "root";
+	$password = "";
+	$server = "localhost";
 }
 
 
@@ -189,7 +189,7 @@ else if (isset($_REQUEST["adminLogin"])){
 
 	if($rows >= 1){
 		session_start();
-		$_SESSION["username"]=$username;
+		$_SESSION["admin"]=$username;
 		echo "True";
 	}
 	else
@@ -206,6 +206,27 @@ else if (isset($_REQUEST["userLogin"])){
 	if(mysql_num_rows($query) == 1){
 		session_start();
 		$_SESSION["username"]=$username;
+		echo "True";
+	}
+	else
+		echo "False";
+}
+
+//worker Login
+else if (isset($_REQUEST["workerLogin"])){
+	$username = $_REQUEST["username"];
+	$password = $_REQUEST["password"];
+
+	$query = mysql_query("SELECT wid from srs_worker where username = '$username' and password = '$password'",$link);
+
+	if($query){
+		$queryResult = mysql_fetch_assoc($query);
+		$wid = $queryResult["wid"];
+	}
+	if(mysql_num_rows($query) == 1){
+		session_start();
+		$_SESSION["worker"]=$username;
+		$_SESSION["wid"]=$wid;
 		echo "True";
 	}
 	else
@@ -242,6 +263,45 @@ else if(isset($_REQUEST["fetchComments"])){
 		}
 		echo (json_encode($resultArray));
 	}
+	else
+		echo "False";
+}
+
+//Fetch worker tasks
+else if (isset($_REQUEST["fetchTasks"])){
+	session_start();
+	$wid = $_SESSION["wid"];
+	$query = mysql_query("SELECT * from srs_report where wid = '$wid'", $link);
+
+	$queryResult = mysql_fetch_assoc($query);
+
+	$allArray = Array();
+
+	while($queryResult){
+		$allArray[] = $queryResult["rid"];
+		$allArray[] = $queryResult["reporter"];
+		$allArray[] = $queryResult["location"];
+		$allArray[] = $queryResult["description"];
+		$allArray[] = $queryResult["status"];
+		$allArray[] = $queryResult["votes"];
+		$allArray[] = $queryResult["wid"];
+		$allArray[] = $queryResult["tags"];
+
+		$queryResult = mysql_fetch_assoc($query);
+	}
+
+	echo (json_encode($allArray));
+}
+
+else if(isset($_REQUEST["createWorker"])){
+	$fullname = $_REQUEST["fullname"];
+	$username = $_REQUEST["username"];
+	$password = $_REQUEST["password"];
+
+	$query = mysql_query("INSERT into srs_worker (username,password, name) values ('$username', '$password', '$fullname')",$link);
+
+	if($query)
+		echo "True";
 	else
 		echo "False";
 }

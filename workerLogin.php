@@ -2,7 +2,7 @@
 <link href="css/bootstrap.css" rel="stylesheet">
 <script src = "jquery/jquery.js"></script>
 <head>
-	<title>SRS: Admin Login</title>
+	<title>SRS: Worker Login</title>
 </head>
 
 <script>
@@ -18,11 +18,11 @@ function login(){
 
 	else{
 	$.ajax(
-		{url:localURL+"adminLogin&username="+username+"&password="+password,
+		{url:localURL+"workerLogin&username="+username+"&password="+password,
 			async:false,
 			success: function(response){
 				if(response == "True"){
-					document.location = "adminPanel.php";
+					document.location = "workerPanel.php";
 				}
 				else
 					alert("Incorrect Login!");
@@ -39,7 +39,7 @@ function login(){
 		<div class = "col-lg-1"></div><div class = "col-lg-10" style="background-color: white">
 		<div class = "row" align = "center">
 			<img src = "images/logo.png" alt = "Service Request System" style = "width:200px;height:150px"></img>
-			<h1>Service Request System: Admin Login</h1>
+			<h1>Service Request System: Worker Login</h1>
 		</div>
 
 	</br></br>

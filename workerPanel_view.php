@@ -1,14 +1,12 @@
 <?php
 session_start();
-if(isset($_REQUEST["rid"])){
+if(isset($_REQUEST["rid"]) && isset($_SESSION["worker"])){
 	$rid = $_REQUEST["rid"];
-
-	if(isset($_SESSION["username"]))
-		$username = $_SESSION["username"];
+	$worker = $_SESSION["worker"];
 }
 
 else{
-	header("Location: index.php");
+	header("Location: workerPanel.php");
 }
 ?>
 
@@ -17,15 +15,13 @@ else{
 <script src = "js/bootstrap.js"></script>
 <link href="css/bootstrap.css" rel="stylesheet">
 <head>
-	<title>SRS: View Report</title>
+	<title>SRS: Worker Panel - View</title>
 </head>
 
 <script>
 var localURL = "srs_ajax.php?";
 var rid = "<?php echo $rid; ?>";
 var username = '<?php echo $username; ?>';
-var setStatus;
-var setWorker;
 
 $(document).ready(function () {
 	fetchInfo();
@@ -139,6 +135,22 @@ function logout(){
 
 	<body style = "background-color: #D9D9D9">
 
+<!--Nav Bar-->
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand">Worker Panel</a>
+			</div>
+			<!--Home-->
+			<div>
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="workerPanel.php">Tasks</a></li>
+					<li class = "divider"></li>
+					<li><a href="workerPanel_chat.php">Chat</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
 		<div class = "container-fluid">
 			<div class = "col-lg-1"></div><div class = "col-lg-10" style="background-color: white">
 			<div class = "row" align = "center">
@@ -220,17 +232,6 @@ function logout(){
 </div>
 </br>
 
-
-<!--Save Button-->
-<div class = "row" align = "center">
-	<div class = "col-lg-4"></div>
-	<div class = "col-lg-4">
-		<div role = "button" class = "btn btn-success" onClick = "addComment()">Save</div>
-		<a href = "index.php" role = "button" class = "btn btn-danger">Cancel</a>
-	</div>
-	<div class = "col-lg-4"></div>
-</div>
-</br>
 
 
 </br>

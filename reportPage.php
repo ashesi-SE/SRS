@@ -109,6 +109,7 @@ function saveReport(){
 	<input type = "text" class = "form-control" id = "tags" placeholder = "Eg: lecture hall, projector, 218">
 </div>
 
+
 </div>
 <div class = "col-lg-2"></div>
 

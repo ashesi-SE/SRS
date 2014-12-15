@@ -1,6 +1,6 @@
 <?php
-//session_start();
-if(isset($_REQUEST["rid"])){
+session_start();
+if(isset($_REQUEST["rid"]) && isset($_SESSION["admin"])){
 	$rid = $_REQUEST["rid"];
 }
 
@@ -14,7 +14,7 @@ else{
 <script src = "js/bootstrap.js"></script>
 <link href="css/bootstrap.css" rel="stylesheet">
 <head>
-	<title>SRS: Admin Panel</title>
+	<title>SRS: Admin Panel- Edit</title>
 </head>
 
 <script>
@@ -162,6 +162,8 @@ function alertStatus(type, msg){
 				<ul class="nav navbar-nav">
 					<li><a href="adminPanel.php">Home</a></li>
 					<li class = "divider"></li>
+					<li><a href="adminPanel_create.php">Create Worker</a></li>
+					<li><a href="adminPanel_chat.php">Chat</a></li>
 				</ul>
 			</div>
 		</div>
